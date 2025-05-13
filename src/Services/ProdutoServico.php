@@ -41,4 +41,24 @@ final class ProdutoServico
             throw new Exception("Erro ao carregar produtos: " . $erro->getMessage());
         }
     }
+
+    public function inserir(Produto $produto): void
+    {
+        $sql = "INSERT INTO 
+        produtos(nome, descricao, preco, quantidade, fabricante_id)
+                VALUES
+        (:nome, :descricao, :preco, :quantidade, :fabricante_id)";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":nome", $produto->getNome());
+            $consulta->bindValue(":descricao", $produto->getDescricao());
+            $consulta->bindValue(":preco", $produto->getPreco());
+            $consulta->bindValue(":quantidade", $produto->getQuantidade());
+            $consulta->bindValue(":fabricante_id", $produto->getFabricanteId());
+            $consulta->execute();
+        } catch (Throwable $erro) {
+            die("Erro ao inserir produto: " . $erro->getMessage());
+        }
+    }
 }
