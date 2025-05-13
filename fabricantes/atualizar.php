@@ -1,19 +1,21 @@
 <?php
-require_once "../src/funcoes-fabricantes.php";
 
-/* Obtendo o valor do parâmetro via URL */
+use ExemploCrud\Helpers\Utils;
+use ExemploCrud\Models\Fabricante;
+use ExemploCrud\Services\FabricanteServico;
+require_once "../vendor/autoload.php";
+
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 
-/* Chamando a função para carregar os dados de um fabricante */
-$fabricante = listarUmFabricante($conexao, $id);
+$fabricanteServico = new FabricanteServico();
+$fabricanteDados = $fabricanteServico->buscarPorId($id);
 
-/* Verificando se o formulário de atualização foi acionado */
+// Utils::dump($fabricanteDados);
+
 if(isset($_POST['atualizar'])){
     $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
-    
-    /* Exercício! Implemente a função para atualizar o nome do fabricante */
-    atualizarFabricante($conexao, $id, $nome);
-    
+    $fabricante = new Fabricante($nome, $id);
+    $fabricanteServico->atualizar($fabricante);
     header("location:visualizar.php");
     exit;
 }
@@ -36,11 +38,11 @@ if(isset($_POST['atualizar'])){
         <form action="" method="post" class="w-25">
             <!-- Campo oculto (hidden): o formulário/servidor "sabe"
             do valor, mas não mostra para o usuário -->
-            <input type="hidden" name="id" value="<?=$fabricante['id']?>">
+            <input type="hidden" name="id" value="<?=$fabricanteDados['id']?>">
 
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome:</label>
-                <input value="<?=$fabricante['nome']?>" 
+                <input value="<?=$fabricanteDados['nome']?>" 
                 class="form-control" required type="text" name="nome" id="nome">
             </div>
             <button class="btn btn-warning" type="submit" name="atualizar">
