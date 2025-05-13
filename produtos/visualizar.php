@@ -1,9 +1,9 @@
 <?php // produtos/visualizar.php
 
+use ExemploCrud\Helpers\Utils;
 use ExemploCrud\Services\ProdutoServico;
 
 require_once "../vendor/autoload.php";
-require_once "../src/funcoes-utilitarias.php";
 
 $produtoServico = new ProdutoServico();
 $listaDeProdutos = $produtoServico->listarTodos();
@@ -35,9 +35,9 @@ $listaDeProdutos = $produtoServico->listarTodos();
                     <article class="bg-body-secondary p-2">
                         <h3> <?= $produto["produto"] ?> </h3>
                         <h4>Fabricante: <?= $produto["fabricante"] ?></h4>
-                        <p><b>Preço: </b> <?= formatarPreco($produto["preco"]) ?> </p>
+                        <p><b>Preço: </b> <?= Utils::formatarPreco($produto["preco"]) ?> </p>
                         <p><b>Quantidade: </b> <?= $produto["quantidade"] ?></p>
-                        <p><b>Total:</b> <?= formatarPreco($produto["total"]) ?> </p>
+                        <p><b>Total:</b> <?= Utils::formatarPreco($produto["total"]) ?> </p>
                         <p>
                             <a class="btn btn-warning" href="atualizar.php?id=<?= $produto["id"] ?>">Editar</a>
                             <a class="btn btn-danger" href="excluir.php?id=<?= $produto["id"] ?>">Excluir</a>
