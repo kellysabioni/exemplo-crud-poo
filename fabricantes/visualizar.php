@@ -1,10 +1,20 @@
 <?php
+
+use ExemploCrud\Helpers\Utils;
 use ExemploCrud\Services\FabricanteServico;
+
 require_once "../vendor/autoload.php";
 
-$fabricanteServico = new FabricanteServico();
-$listaDeFabricantes = $fabricanteServico->listarTodos();
-$quantidade = count($listaDeFabricantes);
+$mensagemErro = "";
+
+try {
+    $fabricanteServico = new FabricanteServico();
+    $listaDeFabricantes = $fabricanteServico->listarTodos();
+    $quantidade = count($listaDeFabricantes);
+} catch (Throwable $erro) {
+    Utils::registrarLog($erro);
+    $mensagemErro = "Houve um erro ao carregar os dados. Fale com suporte";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -23,11 +33,16 @@ $quantidade = count($listaDeFabricantes);
         <hr>
         <h2>Lendo e carregando todos os fabricantes.</h2>
 
+        <?php
+        if (!empty($mensagemErro)): ?>
+            <p class="alert alert-danger"> <?= $mensagemErro ?> </p>
+        <?php endif; ?>
+
         <p><a class="btn btn-primary btn-sm" href="inserir.php">Inserir novo fabricante</a></p>
 
 
         <table class="table table-hover table-bordered w-50">
-            <caption>Lista de Fabricantes: <?=$quantidade?> </caption>
+            <caption>Lista de Fabricantes: <?= $quantidade ?> </caption>
             <thead class="table-light">
                 <tr>
                     <th>ID</th>
@@ -37,22 +52,22 @@ $quantidade = count($listaDeFabricantes);
             </thead>
             <tbody>
 
-<?php 
-foreach($listaDeFabricantes as $fabricante) { ?>
-                <tr>
-                    <td> <?= $fabricante["id"] ?> </td>
-                    <td> <?= $fabricante["nome"] ?> </td>
-                    <td>
-                        <!-- Configurando o link DINÂMICO
+                <?php
+                foreach ($listaDeFabricantes as $fabricante) { ?>
+                    <tr>
+                        <td> <?= $fabricante["id"] ?> </td>
+                        <td> <?= $fabricante["nome"] ?> </td>
+                        <td>
+                            <!-- Configurando o link DINÂMICO
                         Passamos um parâmetro de URL para a página atualizar.php,
                         neste caso, o parâmetro chamado "id" contendo o
                         valor do id do fabricante a ser editado. -->
-                        <a class="btn btn-warning btn-sm" href="atualizar.php?id=<?=$fabricante['id']?>">Editar</a>
-                        <a class="btn btn-danger btn-sm" href="excluir.php?id=<?=$fabricante['id']?>">Excluir</a>
-                    </td>
-                </tr>                
-<?php } ?>
-                
+                            <a class="btn btn-warning btn-sm" href="atualizar.php?id=<?= $fabricante['id'] ?>">Editar</a>
+                            <a class="btn btn-danger btn-sm" href="excluir.php?id=<?= $fabricante['id'] ?>">Excluir</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+
             </tbody>
         </table>
     </div>
