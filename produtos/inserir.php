@@ -15,7 +15,7 @@ $produtoServico = new ProdutoServico();
 
 if (isset($_POST["inserir"])) {
     // Capturar/sanitizar os dados
-    $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
     $preco = filter_input(INPUT_POST, "preco", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $quantidade = filter_input(INPUT_POST, "quantidade", FILTER_SANITIZE_NUMBER_INT);
     // Obs.: lembre-se que capturamos na verdade o value (que na prática é o id do fabricante)
