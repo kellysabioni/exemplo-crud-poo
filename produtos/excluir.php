@@ -1,9 +1,19 @@
 <?php
-require_once "../src/funcoes-produtos.php";
+
+use ExemploCrud\Services\ProdutoServico;
+
+require_once "../vendor/autoload.php";
+
+$produtoServico = new ProdutoServico();
+
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 
-if(isset($_GET['confirmar-exclusao'])){
-    excluirProduto($conexao, $id);
+$produto = $produtoServico->buscarPorId($id);
+
+
+if (isset($_GET['confirmar-exclusao'])) {
+
+    $produtoServico->excluir($id);
     header("location:visualizar.php");
     exit;
 }
@@ -24,10 +34,10 @@ if(isset($_GET['confirmar-exclusao'])){
         <hr>
 
         <div class="alert alert-danger w-50">
-            <p> Deseja realmente excluir o produto?</p>
+            <p> Deseja realmente excluir o produto: <?= $produto["nome"] ?> ?</p>
 
             <a href="visualizar.php" class="btn btn-secondary">Não</a>
-            <a href="?id=<?=$id?>&confirmar-exclusao" class="btn btn-danger">Sim</a>
+            <a href="?id=<?= $id ?>&confirmar-exclusao" class="btn btn-danger">Sim</a>
 
         </div>
 

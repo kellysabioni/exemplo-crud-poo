@@ -58,7 +58,59 @@ final class ProdutoServico
             $consulta->bindValue(":fabricante_id", $produto->getFabricanteId());
             $consulta->execute();
         } catch (Throwable $erro) {
-            die("Erro ao inserir produto: " . $erro->getMessage());
+            throw new Exception("Erro ao inserir produto: " . $erro->getMessage());
+        }
+    }
+
+    public function buscarPorId(int $id): ?array
+    {
+        $sql = "SELECT * FROM produtos WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao carregar produto: " . $erro->getMessage());
+        }
+    }
+
+    public function atualizar(Produto $produto): void
+    {
+
+        $sql = "UPDATE produtos SET
+            nome = :nome, 
+            preco = :preco, 
+            quantidade = :quantidade, 
+            fabricante_id = :fabricante_id, 
+            descricao = :descricao
+            WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":nome", $produto->getNome(), PDO::PARAM_STR);
+            $consulta->bindValue(":preco", $produto->getPreco(), PDO::PARAM_STR);
+            $consulta->bindValue(":quantidade", $produto->getQuantidade(), PDO::PARAM_INT);
+            $consulta->bindValue(":fabricante_id", $produto->getFabricanteId(), PDO::PARAM_INT);
+            $consulta->bindValue(":descricao", $produto->getDescricao(), PDO::PARAM_STR);
+            $consulta->bindValue(":id", $produto->getId(), PDO::PARAM_INT);
+            $consulta->execute();
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao atualizar produto: " . $erro->getMessage());
+        }
+    }
+
+    public function excluir(int $id): void
+    {
+        $sql = "DELETE FROM produtos WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao excluir produto: " . $erro->getMessage());
         }
     }
 }
