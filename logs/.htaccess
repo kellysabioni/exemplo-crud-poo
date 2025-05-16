@@ -1,0 +1,2 @@
+# bloqueando o acesso à pasta logs
+Deny from all
